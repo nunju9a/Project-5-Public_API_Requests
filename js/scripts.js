@@ -72,7 +72,6 @@ function modalWindow(x){                                                        
 
     // LISTENING FOR MODAL WINDOW 'X' TO BE CLICKED, THEN CLOSES MODAL WINDOW
     $('#modal-close-btn').on('click', function(){                 
-        console.log('goodbye')
         $('.modal-container').remove();                                     // Removing Modal HTML from the body
   });
 }
@@ -81,7 +80,52 @@ function modalWindow(x){                                                        
 
 // LISTENING FOR EACH EMPLOYEE GALLERY CARD TO BE CLICKED, THEN OPENS MODAL WINDOW
 $('#gallery').on('click', '.card', function() {
-    console.log('hello');
     x = ($(this).index());                                        // Pointing to index value of which card was clicked on
     modalWindow(x);                                              // Calling function to open Modal Window of specific card
 }); 
+
+
+
+// DYNAMICALLY ADDING HTML ELEMENT CONTAINING SEARCH BAR
+const searchBar =                                                                           // Storing HTML (From Modal Search in index.html)
+`<form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+</form>`;
+$('.search-container').append(searchBar);                                               // Appending HTML to 'search-container' div
+
+// ADDING LABEL THAT DISPLAYS NO RESULTS MESSAGE IF SEARCH COMES BACK EMPTY
+$('.search-container').before('<label class="noresult" id="noresult"><font color="red">No Search Results</font></label>');
+$('.noresult').hide();  
+
+
+let searchResults = [];                                                                  // Creating empty array for search results
+//SEARCH FUNCTION THAT COMPARES THE INPUT WITH THE EMPLOYEE LIST, THEN DISPLAYS RESULTS
+const searchInput = () => {
+searchResults = [];                                                                   // Empties search results 
+// Looping through employee list
+    for (let x = 0; x < $('#gallery .card').length; x++) {
+        //Conditional statement to test Gallery Card field and see if it includes the search input value                                      
+        if ($('#gallery .card')[x].textContent.toLowerCase().includes($('#search-input').val().toLowerCase())) {                        
+            $('#gallery .card')[x].style.display = "block";                                // Displays employee content if a match
+            searchResults.push($('#gallery .card')[x]);                                   // Stores each employee in the searchResults array
+        } else {
+            $('#gallery .card')[x].style.display = "none";                              // Hides all students who do not match any input value
+          }
+    }
+    if (searchResults.length === 0) {
+        $('.noresult').show();;       // If the searchResults array is empty, show "no results" message
+    } else {
+        $('.noresult').hide();      // Otherwise, hide the "no results" message  
+      }
+}
+
+// LISTENING FOR SEARCH BUTTON TO BE CLICKED, THEN RETURNS SEARCH RESULTS
+    $('#search-submit').on('click', () => {
+        searchInput();
+    });
+
+// LISTENING FOR SEARCH INPUT KEYUP, THEN RETURNS SEARCH RESULTS 
+$('#search-input').on('keyup', (e) => {
+    searchInput();
+});   

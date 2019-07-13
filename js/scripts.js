@@ -18,6 +18,7 @@ $.ajax({
             const email = user.email;
             const city = user.location.city;
             const state = user.location.state;
+
             // DYNAMICALLY ADDING HTML ELEMENTS CONTAINING EMPLOYEE GALLERY CARDS
             const galleryCard =                                                  // Storing HTML (From Gallery Markup in index.html)
             `<div class="card">
@@ -35,20 +36,23 @@ $.ajax({
     }
 });
 
+
+
 // CREATING MODAL WINDOW FOR EACH EMPLOYEE - TO BE CREATED ONLY WHEN EMPLOYEE CARD IS CLICKED ON
-function modalWindow(i){                                                                          // Pulling JSON info and storing
-    const image = jsonData[i].picture.large;
-    const firstName = jsonData[i].name.first;
-    const lastName = jsonData[i].name.last;
-    const email = jsonData[i].email;
-    const city = jsonData[i].location.city.toUpperCase();
-    const phoneNumber = jsonData[i].phone;
-    const street = jsonData[i].location.street.toUpperCase();
-    const state = jsonData[i].location.state.toUpperCase();
-    const postalCode = jsonData[i].location.postcode;
-    const dob = jsonData[i].dob.date;
-    let birthday = dob.slice(0, 10)                                                    // Slicing DOB to only include first 10 digits
-    const modalContainer =                                                            // Storing HTML (From Modal Markup in index.html)
+function modalWindow(x){                                                                          // Pulling JSON info and storing
+    const image = jsonData[x].picture.large;
+    const firstName = jsonData[x].name.first;
+    const lastName = jsonData[x].name.last;
+    const email = jsonData[x].email;
+    const city = jsonData[x].location.city.toUpperCase();                                    // Capitalizing City
+    const phone = jsonData[x].phone;
+    const street = jsonData[x].location.street.toUpperCase();                              // Capitalizing Street Name
+    const state = jsonData[x].location.state.toUpperCase();                               // Capitalizing State
+    const postCode = jsonData[x].location.postcode;
+    const dob = jsonData[x].dob.date.slice(0,10);                                       // Slicing DOB to only include first 10 digits                                                
+
+    // DYNAMICALLY ADDING HTML ELEMENTS CONTAINING MODAL WINDOW
+    const modalContainer =                                                           // Storing HTML (From Modal Markup in index.html)
     `<div class="modal-container">
         <div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -58,27 +62,26 @@ function modalWindow(i){                                                        
                 <p class="modal-text">${email}</p>
                 <p class="modal-text cap">${city}</p>
                 <hr>
-                <p class="modal-text">${phoneNumber}</p>
-                <p class="modal-text">${street}, ${city}, ${state}, ${postalCode}</p>
-                <p class="modal-text">BIRTHDAY: ${birthday}</p>
+                <p class="modal-text">${phone}</p>
+                <p class="modal-text">${street}, ${city}, ${state}, ${postCode}</p>
+                <p class="modal-text">BIRTHDAY: ${dob}</p>
             </div>
         </div>
     </div>`;
-    $('body').append(modalContainer);                                     // Appending HTML to the body
+    $('body').append(modalContainer);                                            // Appending HTML to the body
+
+    // LISTENING FOR MODAL WINDOW 'X' TO BE CLICKED, THEN CLOSES MODAL WINDOW
+    $('#modal-close-btn').on('click', function(){                 
+        console.log('goodbye')
+        $('.modal-container').remove();                                     // Removing Modal HTML from the body
+  });
 }
 
-// LISTENING FOR EACH EMPLOYEE GALLERY CARD TO BE CLICKED, THEN OPENS MODAL WINDOW
-$('#gallery').on('click', '.card', function(event) {
-    console.log('hello');
-    event.preventDefault();
-    i = ($(this).index());                                        // Pointing to index value of which card was clicked on
-    modalWindow(i);                                              // Calling function to open Modal Window of specific card
-}); 
 
-// LISTENING FOR MODAL WINDOW 'X' TO BE CLICKED, THEN CLOSES MODAL WINDOW
-$('#modal-close-btn').on('click', function(){                 
-    console.log('bye')
-    $('.modal-container').hide();
-    $('body').children().last().remove();
-    i = 0;                                               // Clearing index value of card that was clicked on
-  });
+
+// LISTENING FOR EACH EMPLOYEE GALLERY CARD TO BE CLICKED, THEN OPENS MODAL WINDOW
+$('#gallery').on('click', '.card', function() {
+    console.log('hello');
+    x = ($(this).index());                                        // Pointing to index value of which card was clicked on
+    modalWindow(x);                                              // Calling function to open Modal Window of specific card
+}); 

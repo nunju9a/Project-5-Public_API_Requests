@@ -128,7 +128,7 @@ const searchInput = () => {
     for (let x = 0; x < $('#gallery .card').length; x++) {
         //Conditional statement to test Gallery Card field and see if it includes the search input value                                      
         if ($('#gallery .card')[x].textContent.toLowerCase().includes($('#search-input').val().toLowerCase())) {                        
-            $('#gallery .card')[x].style.display = "block";                                // Displays employee content if a match
+            $('#gallery .card')[x].style.display = "flex";                                // Displays employee content if a match
             searchResults.push($('#gallery .card')[x]);                                   // Stores each employee in the searchResults array
         } else {
               $('#gallery .card')[x].style.display = "none";                            // Hides all students who do not match any input value

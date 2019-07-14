@@ -49,8 +49,8 @@ function modalWindow(x){                                                        
     const street = jsonData[x].location.street.toUpperCase();                              // Capitalizing Street Name
     const state = jsonData[x].location.state.toUpperCase();                               // Capitalizing State
     const postCode = jsonData[x].location.postcode;
-    const dob = jsonData[x].dob.date.slice(0,10);                                       // Slicing DOB to only include first 10 digits                                                
-
+    const dob = jsonData[x].dob.date.slice(0,10);                                       // Slicing DOB to only include first 10 digits    
+  
     // DYNAMICALLY ADDING HTML ELEMENTS CONTAINING MODAL WINDOW
     const modalContainer =                                                           // Storing HTML (From Modal Markup in index.html)
     `<div class="modal-container">
@@ -67,6 +67,10 @@ function modalWindow(x){                                                        
                 <p class="modal-text">BIRTHDAY: ${dob}</p>
             </div>
         </div>
+        <div class="modal-btn-container">
+                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                <button type="button" id="modal-next" class="modal-next btn">Next</button>
+        </div>
     </div>`;
     $('body').append(modalContainer);                                            // Appending HTML to the body
 
@@ -74,6 +78,24 @@ function modalWindow(x){                                                        
     $('#modal-close-btn').on('click', function(){                 
         $('.modal-container').remove();                                     // Removing Modal HTML from the body
   });
+    // REMOVING 'PREV' BUTTON IF ON FIRST EMPLOYEE OR REMOVING 'NEXT' IF ON LAST EMPLOYEE
+    if (x === 0){
+        $(".modal-prev").remove();
+    }  else if (x === 11){
+           $(".modal-next").remove();   
+        }
+    // LISTENING FOR 'NEXT' BUTTON TO BE CLICKED, THEN REMOVES CURRENT MODAL AND OPENS NEXT EMPLOYEE MODAL
+    $(".modal-next").on('click', function(){
+        $('.modal-container').remove();
+        x++                                                                           // Incrementing index of Employee Modal
+        modalWindow(x);                                                              // Calling function to open Modal Window of specific card
+    }); 
+    // LISTENING FOR 'PREV' BUTTON TO BE CLICKED, THEN REMOVES CURRENT MODAL AND OPENS PREVIOUS EMPLOYEE MODAL
+    $(".modal-prev").on('click', function(){
+        $('.modal-container').remove();
+        x--                                                                     // Decrementing index of Employee Modal
+        modalWindow(x);                                                        // Calling function to open Modal Window of specific card
+    }); 
 }
 
 
@@ -92,31 +114,31 @@ const searchBar =                                                               
     <input type="search" id="search-input" class="search-input" placeholder="Search...">
     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
 </form>`;
-$('.search-container').append(searchBar);                                               // Appending HTML to 'search-container' div
+$('.search-container').append(searchBar);                                              // Appending HTML to 'search-container' div
 
-// ADDING LABEL THAT DISPLAYS NO RESULTS MESSAGE IF SEARCH COMES BACK EMPTY
+// ADDING LABEL THAT DISPLAYS 'NO RESULTS' MESSAGE IF SEARCH COMES BACK EMPTY
 $('.search-container').before('<label class="noresult" id="noresult"><font color="red">No Search Results</font></label>');
 $('.noresult').hide();  
-
 
 let searchResults = [];                                                                  // Creating empty array for search results
 //SEARCH FUNCTION THAT COMPARES THE INPUT WITH THE EMPLOYEE LIST, THEN DISPLAYS RESULTS
 const searchInput = () => {
-searchResults = [];                                                                   // Empties search results 
-// Looping through employee list
+    searchResults = [];                                                               // Empties search results 
+    // Looping through employee list
     for (let x = 0; x < $('#gallery .card').length; x++) {
         //Conditional statement to test Gallery Card field and see if it includes the search input value                                      
         if ($('#gallery .card')[x].textContent.toLowerCase().includes($('#search-input').val().toLowerCase())) {                        
             $('#gallery .card')[x].style.display = "block";                                // Displays employee content if a match
             searchResults.push($('#gallery .card')[x]);                                   // Stores each employee in the searchResults array
         } else {
-            $('#gallery .card')[x].style.display = "none";                              // Hides all students who do not match any input value
+              $('#gallery .card')[x].style.display = "none";                            // Hides all students who do not match any input value
           }
     }
+    // Showing or hiding 'no results' message
     if (searchResults.length === 0) {
         $('.noresult').show();;       // If the searchResults array is empty, show "no results" message
     } else {
-        $('.noresult').hide();      // Otherwise, hide the "no results" message  
+          $('.noresult').hide();    // Otherwise, hide the "no results" message  
       }
 }
 

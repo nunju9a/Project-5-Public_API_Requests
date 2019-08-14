@@ -7,7 +7,7 @@ scripts.js
 
 //AJAX REQUEST TO DISPLAY 12 RANDOM EXPLOYEES
 $.ajax({
-    url: 'https://randomuser.me/api/?results=12&nat=us',         // API for generating random user data - requesting 12, only from US
+    url: 'https://randomuser.me/api/?results=30&nat=us',         // API for generating random user data - requesting 12, only from US
     dataType: 'json',
     success: function(data) {
         jsonData = data.results;                              // Storing data 
@@ -81,7 +81,7 @@ function modalWindow(x){                                                        
     // REMOVING 'PREV' BUTTON IF ON FIRST EMPLOYEE OR REMOVING 'NEXT' IF ON LAST EMPLOYEE
     if (x === 0){
         $(".modal-prev").remove();
-    }  else if (x === 11){
+    }  else if (x === jsonData.length - 1){
            $(".modal-next").remove();   
         }
     // LISTENING FOR 'NEXT' BUTTON TO BE CLICKED, THEN REMOVES CURRENT MODAL AND OPENS NEXT EMPLOYEE MODAL

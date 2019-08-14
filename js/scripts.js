@@ -4,40 +4,44 @@ Treehouse FSJS Techdegree
 Project 5 - Public API Requests 
 scripts.js
 ***************************/
+function repeatAjax(){
+//AJAX REQUEST TO DISPLAY 30 RANDOM EXPLOYEES
+    $.ajax({
+        url: 'https://randomuser.me/api/?results=30&nat=us',         // API for generating random user data - requesting 12, only from US
+        dataType: 'json',
+        success: function(data) {
+            jsonData=data.results;                              // Storing data 
+            jsonDataIndex = [];
+            x = 0
+            data.results.forEach(user => {                       // Looping through each employee and pulling all JSON info;
+                const image = user.picture.large;
+                const firstName = user.name.first;            
+                const lastName = user.name.last;
+                const email = user.email;
+                const city = user.location.city;
+                const state = user.location.state;
+               jsonDataIndex.push(x)
+                x++
 
-//AJAX REQUEST TO DISPLAY 12 RANDOM EXPLOYEES
-$.ajax({
-    url: 'https://randomuser.me/api/?results=30&nat=us',         // API for generating random user data - requesting 12, only from US
-    dataType: 'json',
-    success: function(data) {
-        jsonData = data.results;                              // Storing data 
-        data.results.forEach(user => {                       // Looping through each employee and pulling all JSON info;
-            const image = user.picture.large;
-            const firstName = user.name.first;            
-            const lastName = user.name.last;
-            const email = user.email;
-            const city = user.location.city;
-            const state = user.location.state;
+                // DYNAMICALLY ADDING HTML ELEMENTS CONTAINING EMPLOYEE GALLERY CARDS
+                const galleryCard =                                                  // Storing HTML (From Gallery Markup in index.html)
+                `<div class="card">
+                    <div class="card-img-container">
+                        <img class="card-img" src="${image}" alt="profile picture">
+                    </div>
+                    <div class="card-info-container">
+                        <h3 id="name" class="card-name cap">${firstName} ${lastName}</h3>
+                        <p class="card-text">${email}</p>
+                        <p class="card-text cap">${city}, ${state}</p>
+                    </div>
+                </div>`;
+                $('#gallery').append(galleryCard);                        // Appending HTML to the 'gallery' id div
+            })
+        }
+    });
+}
 
-            // DYNAMICALLY ADDING HTML ELEMENTS CONTAINING EMPLOYEE GALLERY CARDS
-            const galleryCard =                                                  // Storing HTML (From Gallery Markup in index.html)
-            `<div class="card">
-                <div class="card-img-container">
-                    <img class="card-img" src="${image}" alt="profile picture">
-                </div>
-                <div class="card-info-container">
-                    <h3 id="name" class="card-name cap">${firstName} ${lastName}</h3>
-                    <p class="card-text">${email}</p>
-                    <p class="card-text cap">${city}, ${state}</p>
-                </div>
-            </div>`;
-            $('#gallery').append(galleryCard);                        // Appending HTML to the 'gallery' id div
-        })
-    }
-});
-
-
-
+repeatAjax();
 // CREATING MODAL WINDOW FOR EACH EMPLOYEE - TO BE CREATED ONLY WHEN EMPLOYEE CARD IS CLICKED ON
 function modalWindow(x){                                                                          // Pulling JSON info and storing
     const image = jsonData[x].picture.large;
@@ -151,3 +155,16 @@ const searchInput = () => {
 $('#search-input').on('keyup', (e) => {
     searchInput();
 });   
+// function addMoreIndex(){
+//    for (let x = jsonDataIndex.length; x < 60 ; x++)
+//             jsonDataIndex.push(x)
+// }
+
+$(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        //alert("bottom!");
+        repeatAjax();
+        //addMoreIndex();
+        
+    }
+ });

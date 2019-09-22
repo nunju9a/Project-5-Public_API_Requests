@@ -9,7 +9,6 @@ I requested a JSON object from the API (using jQuery) and parsed the data so tha
 
 - Dynamically added search feature to filter through employees.  Employees can be searched by either name, email, city, or state.
 - Modal toggle added to move between modal windows using prev and next buttons.
-- Page automatically makes new API request on bottom scroll, adding on to existing list of employees
 
 
 - Live Link: https://nunju9a.github.io/Project-5-Public_API_Requests/

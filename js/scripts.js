@@ -160,11 +160,12 @@ $('#search-input').on('keyup', (e) => {
 //             jsonDataIndex.push(x)
 // }
 
-$(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        //alert("bottom!");
-        repeatAjax();
-        //addMoreIndex();
+// Work in progress  - Added bottom scroll feature to fetch more data (working), but modal window negatively effected
+// $(window).scroll(function() {
+//     if($(window).scrollTop() + $(window).height() == $(document).height()) {
+//         //alert("bottom!");
+//         repeatAjax();
+//         //addMoreIndex();
         
-    }
- });
+//     }
+//  });
